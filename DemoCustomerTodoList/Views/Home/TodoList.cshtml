@@ -1,0 +1,130 @@
+﻿@model IEnumerable<DemoCustomerTodoList.Models.TODOList>
+@{
+    Layout = "~/Views/Shared/CommonFunctionality.cshtml";   //calling layout page for back button for TodoList& contactsInfo pages
+    WebGrid webGrid = new WebGrid(source: Model, canPage: true, canSort: true);
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="shortcut icon"/>
+
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+
+        .Grid {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+        }
+
+            .Grid th {
+                background-color: #F7F7F7;
+                font-weight: bold;
+            }
+
+            .Grid th, .Grid td {
+                padding: 5px;
+                width: 150px;
+                border: 1px solid #ccc;
+            }
+
+            .Grid, .Grid table td {
+                border: 0px solid #ccc;
+            }
+
+                .Grid th a, .Grid th a:visited {
+                    color: #333;
+                }
+    </style>
+</head>
+<body>
+    @* Web grid creation of each column with respective Header names/labels/textboxes/checkboxes ----Start *@
+
+    @webGrid.GetHtml(
+                                                                                            htmlAttributes: new { @id = "WebGrid", @class = "Grid" },
+                                                                                            columns: webGrid.Columns(
+
+                                            webGrid.Column(header: "TodoList Id", format: @<span class="label">@item.TdlistID</span>, style: "TdlistID"),
+
+                                                                                                      webGrid.Column(header: "Description", format: @<span>
+                                                                                                        <span class="label">@item.Description</span>
+                                                                                                        @*<textarea id="txt" rows="10" cols="30"></textarea>*@
+                                                                                                        <input class="text" type="text" value="@item.Description" style="display:none" />
+                                                                                                    </span>, style: "Description"),
+
+                                                                                                                                    webGrid.Column(header: "Creation Date", format: @<span>
+                                                                                                                                        <span class="label">@item.CreationDate.ToShortDateString()</span>
+                                                                                                                                        <input class="text" type="date" style="display:none" value="@item.CreationDate.ToShortDateString()" />
+                                                                                                                                    </span>, style: "CreationDate"),
+
+                                                                                      webGrid.Column(header: "CustomerID", format: @<span class="label">@item.CustomerID</span>, style: "CustomerID"),
+
+                                                                                                                                                                                      webGrid.Column(header: "Resolved", format: @<span>
+                                                                                                                                                                                                                                      <div style="text-align:center;">    <input id="submitchkbox" type="checkbox" @(((item.Resolved == true) ? " checked=checked" : "")) name="CloseSelling" value="@item.Resolved" class="edit-mode" onchange="adchange()" /></div>
+
+
+                                                                                                                                                                                    </span>, style: "Resolved"),
+
+
+                                                                                                                                                                                                                                                              webGrid.Column(format:@<span class="link">
+                                                                                                                                                                                                                                                                <a class="Edit" href="javascript:;">Edit</a>
+                                                                                                                                                                                                                                                                <a class="Update" href="javascript:;" style="display:none">Update</a>
+                                                                                                                                                                                                                                                                <a class="Cancel" href="javascript:;" style="display:none">Cancel</a>
+                                                                                                                                                                                                                                                                <a class="Delete" href="javascript:;">Delete</a>
+                                                                                                                                                                                                                                                            </span>)))
+
+    @* Web grid creation of each column with respective Header names/labels/textboxes/checkboxes ----END *@
+    <br />
+
+    @* Table creation with adding a new Todo for selected customer with Add Button--End *@
+    <table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+
+
+            <td style="width: 150px">
+                Description:<br />
+                <input type="text" id="txtDescription" style="width:140px" />
+            </td>
+            <td style="width: 150px">
+                CreationDate:<br />
+                <input type="date" id="txtCreationdt" style="width:140px" />
+            </td>
+            <td style="width: 150px">
+                Resolved:<br />
+                <input type="checkbox" id="chkresolved" style="width:140px" />
+            </td>
+
+            <td style="width: 100px">
+                <br />
+                <input type="button" class="button" style="background-color: #e7e7e7; color: black;" id="btnAdd" value="Add" />
+            </td>
+        </tr>
+    </table>
+    @* Table creation with adding a new Todo for selected customer with Add Button--End *@
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+    <script src="~/Scripts/TodoList/gridTodolist.js"></script>
+    <link href="~/Content/buttonDesign.css" rel="stylesheet" />
+    <script type="text/javascript">
+        //$(function () {
+        //    var row = $("#WebGrid TBODY tr:eq(0)");
+        //    if ($("#WebGrid TBODY tr").length > 1) {
+        //        null;//row.remove();
+        //    } else {
+        //        row.find(".label").html("");
+        //        row.find(".text").val("");
+        //        row.find(".link").hide();
+        //    }
+        //});
+
+
+
+    </script>
+</body>
+</html>

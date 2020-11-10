@@ -1,0 +1,175 @@
+﻿
+@model IEnumerable<DemoCustomerTodoList.Models.Customer>
+
+@{
+    Layout = null;
+
+    WebGrid webGrid = new WebGrid(source: Model, canPage: true, canSort: true, rowsPerPage: 20);
+
+
+
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    
+
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+
+        .Grid {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+        }
+
+            .Grid th {
+                background-color: #F7F7F7;
+                font-weight: bold;
+            }
+
+            .Grid th, .Grid td {
+                padding: 5px;
+                width: 150px;
+                border: 1px solid #ccc;
+            }
+
+            .Grid, .Grid table td {
+                border: 0px solid #ccc;
+            }
+
+                .Grid th a, .Grid th a:visited {
+                    color: #333;
+                }
+    </style>
+</head>
+<body>
+
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new
+    {
+        @id = "WebGridForm",
+        role = "form",
+
+        enctype = "multipart/form-data"
+    }))
+    {
+        <br />
+        <h1>Customer Information</h1>
+
+        <br />
+        <br />
+        <div id="search" style="margin-left:50px">
+            <label id="Search" style="background-color: #e7e7e7; color: black;">SEARCH CUSTOMER NAME</label>
+            <input type="text" id="txtSearch" placeholder="Search First Name" />
+            <input type="submit" class="button" id="btnSearch" formnovalidate="formnovalidate" style="background-color: #e7e7e7; color: black;" />
+        </div>
+
+
+
+
+
+        <br />
+
+        @webGrid.GetHtml(
+                                    htmlAttributes: new { @id = "WebGrid", @class = "Grid" }, columns: webGrid.Columns(
+                                        webGrid.Column(header: "Customer Id", format: @<span class="label">@item.CustomerId</span>, style: "CustomerId"),
+                                                                                    webGrid.Column(header: "FirstName", format: @<span>
+                                                                                        <span class="label">@item.FirstName</span>
+                                                                                        <input class="text" type="text" onkeypress="return (event.charCode > 64 && event.charCode < 91) ||
+                                                                                        (event.charCode > 96 && event.charCode < 123)" value="@item.FirstName" style="display:none" />
+                                                                                    </span>, style: "FirstName"),
+                                                                                                                         webGrid.Column(header: "LastName", format: @<span>
+                                                                                                                            <span class="label">@item.LastName</span>
+                                                                                                                            <input class="text" onkeypress="return (event.charCode > 64 && event.charCode < 91) ||
+                                                                                                                            (event.charCode > 96 && event.charCode < 123)" type="text" value="@item.LastName" style="display:none" />
+                                                                                                                        </span>, style: "LastName"),
+                                                                                                                                                                       webGrid.Column(header: "DateOfBirth", format: @<span>
+                                                                                                                                                                        <span class="label">  @item.DateOfBirth.ToShortDateString()</span>
+                                                                                                                                                                        <input class="text" type="date" value="@item.DateOfBirth.ToShortDateString()" style="display:none" />
+
+                                                                                                                                                                    </span>, style: "DateOfBirth"),
+                                                              webGrid.Column(format:@<span class="link">
+                                                                <a class="Edit" href="javascript:;">Edit</a>
+                                                                <a class="Update" href="javascript:;" style="display:none">Update</a>
+                                                                <a class="Cancel" href="javascript:;" style="display:none">Cancel</a>
+                                                                <a class="Delete" href="javascript:;">Delete</a>
+
+                                                            </span>),
+
+                                                                      webGrid.Column(null, null, format:@<text>@Html.ActionLink("Contact", "ContactsInfo", "Home", new { id = item.CustomerId }, null)</text>),
+                                                                                webGrid.Column(null, null, format:@<text>@Html.ActionLink("TodoList", "TodoList", "Home", new { id = item.CustomerId }, null)</text>)))
+
+        <br />
+        <br />
+        <div id="tbladdnew">
+            <h3>Add a new Customer</h3>
+            <table border="0" cellpadding="05" cellspacing="30">
+                <tr>
+                    <td style="width: 100px">
+
+                        FirstName:<br />
+                        <input type="text"  id="txtFName" name="Fname" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" style="width:140px" required />
+                    </td>
+                    <td style="width: 150px">
+                        Lastname:<br />
+                        <input type="text" id="txtLName" name="Lname" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" style="width:140px" required />
+                    </td>
+                    <td style="width: 150px">
+                        DoB:<br />
+                        <input type="date" id="txtDOB" name="dob" style="width:140px" required />
+                    </td>
+                    <td style="width: 100px">
+                        <br />
+                        <input type="submit" id="btnAdd" style="background-color: #e7e7e7; color: black;" class="button" value="Add"/>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+        
+        <br />
+        <div>
+            <h3>Import customer data from Excel</h3>
+            <input type="file" name="file" /> <input type="submit" formnovalidate="formnovalidate" value="Import to database"  style="background-color: #e7e7e7; color: black"  class="button" />
+
+        </div>
+        <div id="data">
+            <br />
+            <input class="button" type="button" id="btnClear" value="Clear" style="background-color: #e7e7e7; color: black" ;
+                   onclick="location.href='@Url.Action("Index", "Clear")'" />
+        </div>
+    }
+
+    <div>
+        @ViewBag.Success
+    </div>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="~/Scripts/Customer/gridCustomer.js"></script>
+    <link href="~/Content/buttonDesign.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript">
+        //$(function () {
+        //    var row = $("#WebGrid TBODY tr:eq(0)");
+        //    if ($("#WebGrid TBODY tr").length > 1) {
+        //        null;//row.remove();
+        //    } else {
+        //        row.find(".label").html("");
+        //        row.find(".text").val("");
+        //        row.find(".link").hide();
+        //    }
+        //});
+
+
+
+    </script>
+
+</body>
+</html>

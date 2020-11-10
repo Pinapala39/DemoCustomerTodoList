@@ -1,0 +1,120 @@
+﻿@model IEnumerable<DemoCustomerTodoList.Models.ContactInformation>
+@{
+    Layout = "~/Views/Shared/CommonFunctionality.cshtml";    //calling layout page for back button for TodoList& contactsInfo pages
+    WebGrid webGrid = new WebGrid(source: Model, canPage: true, canSort: true);
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="shortcut icon" href="#" />
+
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
+
+        .Grid {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+        }
+
+            .Grid th {
+                background-color: #F7F7F7;
+                font-weight: bold;
+            }
+
+            .Grid th, .Grid td {
+                padding: 5px;
+                width: 150px;
+                border: 1px solid #ccc;
+            }
+
+            .Grid, .Grid table td {
+                border: 0px solid #ccc;
+            }
+
+                .Grid th a, .Grid th a:visited {
+                    color: #333;
+                }
+    </style>
+</head>
+<body>
+
+    <br />
+
+    @* Web grid creation of each column with respective Header names/labels/textboxes/checkboxes ----Start *@
+    @webGrid.GetHtml(
+                     htmlAttributes: new { @id = "WebGrid", @class = "Grid" },
+                     columns: webGrid.Columns(
+                     webGrid.Column(header: "Contact Id", format: @<span class="label">@item.ContactID</span>, style: "ContactID"),
+
+
+                                                     webGrid.Column(header: "ContactType", format: @<span>
+                                                        <span class="label">@item.TypeofContact</span>
+                                                        <input class="text" type="text" value="@item.TypeofContact" style="display:none" />
+                                                    </span>, style: "TypeofContact"),
+
+                                                           webGrid.Column(header: "Contact Value", format: @<span>
+                                                            <span class="label">  @item.ContactValue</span>
+                                                            <input class="text" type="text" value="@item.ContactValue" style="display:none" />
+                                                        </span>, style: "ContactValue"),
+
+                                                                                                                   webGrid.Column(format:@<span class="link">
+                                                                                                                    <a class="Edit" href="javascript:;">Edit</a>
+                                                                                                                    <a class="Update" href="javascript:;" style="display:none">Update</a>
+                                                                                                                    <a class="Cancel" href="javascript:;" style="display:none">Cancel</a>
+                                                                                                                    <a class="Delete" href="javascript:;">Delete</a>
+                                                                                                                </span>)))
+    @* Web grid creation of each column with respective Header names/labels/textboxes/checkboxes ----End *@
+    <br />
+
+    @* Table creation with adding a new contact with Add Button--Start *@
+    <table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+
+            <td style="width: 150px">
+                TypeofContact:<br />
+                <select id="ddlCnt" name="contact">
+                    <option value="1">Phone</option>
+                    <option value="2">Email</option>
+                    <option value="3">Web</option>
+                </select>
+            </td>
+
+            <td style="width: 150px">
+                ContactValue:<br />
+                <input type="text" id="txtContactValue" style="width:140px" />
+            </td>
+            <td style="width: 100px">
+                <br />
+                <input type="button" class="button" style="background-color: #e7e7e7; color: black;" id="btnAdd" value="Add" />
+            </td>
+        </tr>
+    </table>
+
+    @* Table creation with adding a new contact with Add Button--End *@
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+    <script src="~/Scripts/Contacts/gridContact.js"></script>
+    <link href="~/Content/buttonDesign.css" rel="stylesheet" />
+    <script type="text/javascript">
+        //$(function () {
+        //    var row = $("#WebGrid TBODY tr:eq(0)");
+        //    if ($("#WebGrid TBODY tr").length > 1) {
+        //        null;//row.remove();
+        //    } else {
+        //        row.find(".label").html("");
+        //        row.find(".text").val("");
+        //        row.find(".link").hide();
+        //    }
+        //});
+
+    </script>
+</body>
+</html>

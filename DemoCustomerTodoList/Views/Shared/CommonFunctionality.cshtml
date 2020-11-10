@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@Page.Title</title>
+    @RenderSection("head", required: false)
+</head>
+<body>
+   
+    <br />
+        @* Button to go back to home page ----Start *@
+    <div id="commonFunc" style="margin-left:10px">
+        <span>Home page:</span>
+
+        <input type="submit" value="HomePage" onclick="window.history.go(-1); return false;" />
+        <br />
+        @* Button to go back to home page ----End *@
+
+        <br />
+    </div>
+   
+    @RenderBody()
+</body>
+</html>
